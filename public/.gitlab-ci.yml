@@ -1,0 +1,24 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  image: node:18
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - node_modules/
+      - public/
+      - build/
+
+deploy:
+  stage: deploy
+  image: dpl
+  script:
+    - apt-get update -qq && apt-get install -y -qq lftp
+    - lftp -c "set ssl:verify-certificate no; open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_SERVER; mirror -R . $FTP_DEPLOY_PATH"
+  only:
+    - main
