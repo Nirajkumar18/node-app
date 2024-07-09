@@ -19,7 +19,6 @@ deploy:
   stage: deploy
   image: node
   script:
-#    - apt update -y
 #    - apt install npm -y
 #    - npm install
     - npm start > /dev/null 2>&1 &
