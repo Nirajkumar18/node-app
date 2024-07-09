@@ -1,24 +1,18 @@
-stages:
-  - build
-  - deploy
+image: node:latest
 
-build:
-  stage: build
-  image: node
-  script:
-#    - apt update -y
-#    - apt install npm -y
-    - npm install
-  artifacts:
-    paths:
-      - node_modules/
-      - package.json/
-      - public/
+stages:
+  - deploy
 
 deploy:
   stage: deploy
-  image: node
   script:
-#    - apt install npm -y
-#    - npm install
-    - npm start > /dev/null 2>&1 &
+    - echo "Deploying to server..."
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H $SSH_SERVER_IP >> ~/.ssh/known_hosts
+    - ssh $SSH_USERNAME@$SSH_SERVER_IP "mkdir -p /home/ubuntu/your-app"
+    - scp -r * $SSH_USERNAME@$SSH_SERVER_IP:/home/ubuntu/your-app
+    - ssh $SSH_USERNAME@$SSH_SERVER_IP "cd /home/ubuntu/your-app && npm install && sudo npm install -g pm2 && sudo pm2 stop 0 || sudo pm2 start npm --name 'node-app' -- start"
+  only:
+    - main  # Deploy only when changes are pushed to main branch
