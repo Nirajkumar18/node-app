@@ -22,22 +22,12 @@ jobs:
         cache: 'npm'
     - run: npm install
     - run: npm run build --if-present
-    - name: Upload Build Artifacts
-      if: success()  # Only upload if the build is successful
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-artifacts
-        path: ./build  # Adjust this path to where your build artifacts are located    
 
   deploy:
     runs-on: self-hosted
     needs: build
 
     steps:
-    - name: Download Build Artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: build-artifacts
     - name: Deploy Application
       run: |
         # Navigate to the deployment directory
