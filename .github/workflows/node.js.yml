@@ -37,4 +37,4 @@ jobs:
         # Copy the build artifacts to the deployment directory
         sudo cp -R ${{ github.workspace }}/* /var/www/html/node-app
         # Start the application using pm2 and update environment variables
-        sudo pm2 restart node-app 
+        sudo pm2 restart node-app
