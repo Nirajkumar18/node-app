@@ -31,7 +31,7 @@ jobs:
     - name: Deploy Application
       run: |
         # Navigate to the deployment directory
-        cd  /home/ubuntu/actions-runner/_work/node-app/node-app
+        # cd  /home/ubuntu/actions-runner/_work/node-app/node-app - this is the directory created during process
         # Stop the current application using pm2
         sudo pm2 stop node-app
         # Copy the build artifacts to the deployment directory
