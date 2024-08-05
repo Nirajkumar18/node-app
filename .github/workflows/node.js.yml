@@ -22,5 +22,23 @@ jobs:
         cache: 'npm'
     - run: npm install
     - run: npm run build --if-present
-    - run: sudo pm2 restart node-app
 
+  deploy:
+    runs-on: self-hosted
+    needs: build
+
+    steps:
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifacts
+    - name: Deploy Application
+      run: |
+        # Navigate to the deployment directory
+        cd /var/www/my-node-app
+        # Stop the current application using pm2
+        sudo pm2 stop node-app
+        # Copy the build artifacts to the deployment directory
+        sudo cp -R ${{ github.workspace }}/* /var/www/my-node-app
+        # Start the application using pm2 and update environment variables
+        sudo pm2 restart node-app 
