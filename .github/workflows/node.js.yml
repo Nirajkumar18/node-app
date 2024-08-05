@@ -31,10 +31,10 @@ jobs:
     - name: Deploy Application
       run: |
         # Navigate to the deployment directory
-        cd /var/www/my-node-app
+        cd  /home/ubuntu/actions-runner/_work/node-app/node-app
         # Stop the current application using pm2
         sudo pm2 stop node-app
         # Copy the build artifacts to the deployment directory
-        sudo cp -R ${{ github.workspace }}/* /var/www/my-node-app
+        sudo cp -R ${{ github.workspace }}/* /home/ubuntu/actions-runner/_work/node-app/node-app
         # Start the application using pm2 and update environment variables
         sudo pm2 restart node-app 
